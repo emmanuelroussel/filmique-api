@@ -1,5 +1,4 @@
 # filmique-api
----
 
 ## Description
 Koa 2 RESTful API using :
