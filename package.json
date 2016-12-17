@@ -4,13 +4,10 @@
   "version": "1.0.0",
   "author": "Emmanuel Roussel",
   "keywords": [
+    "filmique",
     "koa",
     "rest",
-    "api",
-    "mongodb",
-    "mongoose",
-    "async",
-    "es7"
+    "api"
   ],
   "repository": {
     "type": "git",
