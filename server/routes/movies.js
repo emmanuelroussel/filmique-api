@@ -1,6 +1,9 @@
 import 'babel-polyfill'
 import City from '../models/city'
 import Router from 'koa-router'
+import Request from 'request-promise'
+import tmdbApiKey from '../secrets'
+import tmdbApiUrl from '../global'
 import { baseApi } from '../config'
 
 const api = 'movies'
@@ -28,11 +31,13 @@ router.post('/', async(ctx) => {
 // GET /api/movies/id
 router.get('/:id', async(ctx) => {
   try {
-    const city = await City.findById(ctx.params.id)
-    if (!city) {
-      ctx.throw(404)
-    }
-    ctx.body = city
+    const keywordUrl = tmdbApiUrl + '/search/keyword?api_key=' + tmdbApiKey + '&query=' + ctx.params.id + '&page=1'
+    const keyword = await Request.get(keywordUrl)
+
+    const movieUrl = tmdbApiUrl + '/discover/movie?api_key=' + tmdbApiKey + '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_keywords=' + JSON.parse(keyword).results[0].id
+    const movies = await Request.get(movieUrl)
+
+    ctx.body = JSON.parse(movies)
   } catch (err) {
     if (err.name === 'CastError' || err.name === 'NotFoundError') {
       ctx.throw(404)
