@@ -2,20 +2,20 @@ import app from '../server/'
 import supertest from 'supertest'
 import { expect, should } from 'chai'
 
-const temp = {}
 const request = supertest.agent(app.listen())
 should()
 
-describe('GET /movies/:id', () => {
-  it('should get a movie', (done) => {
+describe('GET /movies/:search/:page', () => {
+  it('should get movies', (done) => {
     request
-      .get(`/api/movies/${temp.idCity}`)
+      .get('/api/movies/space/1')
       .expect(200, (err, res) => {
-        res.body.name.should.equal('Bangkok')
-        res.body.totalPopulation.should.equal(8249117)
-        res.body.country.should.equal('Thailand')
-        res.body.zipCode.should.equal(1200)
-        res.body._id.should.equal(temp.idCity)
+        res.body.page.should.equal(1)
+        res.body.results[0].should.be.an('object')
+        res.body.results[0].title.should.be.a('string')
+        res.body.results[0].poster_path.should.be.a('string')
+        res.body.results[0].overview.should.be.a('string')
+        res.body.results[0].release_date.should.be.a('string')
         done()
       })
   })
