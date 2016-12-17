@@ -28,13 +28,13 @@ router.post('/', async(ctx) => {
   }
 })
 
-// GET /api/movies/id
-router.get('/:id', async(ctx) => {
+// GET /api/movies/search
+router.get('/:search/:page', async(ctx) => {
   try {
-    const keywordUrl = tmdbApiUrl + '/search/keyword?api_key=' + tmdbApiKey + '&query=' + ctx.params.id + '&page=1'
+    const keywordUrl = tmdbApiUrl + '/search/keyword?api_key=' + tmdbApiKey + '&query=' + ctx.params.search + '&page=1'
     const keyword = await Request.get(keywordUrl)
 
-    const movieUrl = tmdbApiUrl + '/discover/movie?api_key=' + tmdbApiKey + '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_keywords=' + JSON.parse(keyword).results[0].id
+    const movieUrl = tmdbApiUrl + '/discover/movie?api_key=' + tmdbApiKey + '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=' + ctx.params.page + '&with_keywords=' + JSON.parse(keyword).results[0].id
     const movies = await Request.get(movieUrl)
 
     ctx.body = JSON.parse(movies)
