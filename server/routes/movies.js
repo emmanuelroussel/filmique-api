@@ -16,17 +16,26 @@ router.prefix(`/${baseApi}/${api}`)
 // GET /api/movies/search
 router.get('/:search/:page', async(ctx) => {
   try {
+    // Get keyword ID from TMDB
     const keywordUrl = `${tmdbApiUrl}/search/keyword?api_key=${tmdbApiKey}` +
       `&query=${ctx.params.search}&page=1`
     const response = await Request.get(keywordUrl)
 
+    // Use keyword ID to get list of movies
     const keyword = JSON.parse(response).results[0].id
     const movieUrl = `${tmdbApiUrl}/discover/movie?api_key=${tmdbApiKey}` +
       '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=' +
       `${ctx.params.page}&with_keywords=${keyword}`
-    const movies = await Request.get(movieUrl)
+    let movies = await Request.get(movieUrl)
 
-    ctx.body = JSON.parse(movies)
+    movies = JSON.parse(movies)
+
+    // Format the poster url
+    for(let i = 0; i < movies.results.length; i++) {
+      movies.results[i].poster_path = `http://image.tmdb.org/t/p/w500/${movies.results[i].poster_path}`
+    }
+
+    ctx.body = movies
   } catch (err) {
     if (err.name === 'CastError' || err.name === 'NotFoundError') {
       ctx.throw(404)
