@@ -1,5 +1,6 @@
 import bodyParser from 'koa-bodyparser'
 import Koa from 'koa'
+import cors from 'kcors'
 import logger from 'koa-logger'
 import mongoose from 'mongoose'
 import routing from './routes/'
@@ -14,6 +15,7 @@ const app = new Koa()
 app
   .use(logger())
   .use(bodyParser())
+  .use(cors())
 
 routing(app)
 
