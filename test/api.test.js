@@ -20,3 +20,20 @@ describe('GET /movies/:search/:page', () => {
       })
   })
 })
+
+describe('GET /movies/:id', () => {
+  it('should get the movie\'s details', (done) => {
+    request
+      .get('/api/movies/157336')
+      .expect(200, (err, res) => {
+        res.body.should.be.an('object')
+        res.body.Title.should.be.a('string')
+        res.body.Rated.should.be.a('string')
+        res.body.Runtime.should.be.a('string')
+        res.body.Genre.should.be.a('string')
+        res.body.Plot.should.be.a('string')
+        res.body.imdbRating.should.be.a('string')
+        done()
+      })
+  })
+})

@@ -1,3 +1,2 @@
-const tmdbApiUrl = 'https://api.themoviedb.org/3'
-
-export default tmdbApiUrl
+export const tmdbApiUrl = 'https://api.themoviedb.org/3'
+export const omdbApiUrl = 'http://www.omdbapi.com'
