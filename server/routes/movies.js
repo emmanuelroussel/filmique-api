@@ -77,7 +77,7 @@ router.get('/:id', async(ctx) => {
     }
 
     if (!info.Runtime || info.Runtime === 'N/A') {
-      info.Runtime = tmdbMovie.runtime
+      info.Runtime = `${tmdbMovie.runtime}` // Convert to String
     }
 
     ctx.body = info
