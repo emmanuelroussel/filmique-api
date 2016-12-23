@@ -5,10 +5,10 @@ import { expect, should } from 'chai'
 const request = supertest.agent(app.listen())
 should()
 
-describe('GET /movies/:search/:page', () => {
+describe('GET /movies/search', () => {
   it('should get movies', (done) => {
     request
-      .get('/api/movies/space/1')
+      .get('/api/movies/search?search=space&page=1')
       .expect(200, (err, res) => {
         res.body.page.should.equal(1)
         res.body.results[0].should.be.an('object')
