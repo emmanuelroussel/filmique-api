@@ -13,19 +13,19 @@ router.prefix(`/${baseApi}/${api}`)
 
 /* eslint-disable no-unused-vars, no-param-reassign, new-cap */
 
-// GET /api/movies/:search/:page
-router.get('/:search/:page', async(ctx) => {
+// GET /api/movies/search
+router.get('/search', async(ctx) => {
   try {
     // Get keyword ID from TMDB
     const keywordUrl = `${tmdbApiUrl}/search/keyword?api_key=${tmdbApiKey}` +
-      `&query=${ctx.params.search}&page=1`
+      `&query=${ctx.request.query.search}&page=1`
     const response = await Request.get(keywordUrl)
 
     // Use keyword ID to get list of movies
     const keyword = JSON.parse(response).results[0].id
     const movieUrl = `${tmdbApiUrl}/discover/movie?api_key=${tmdbApiKey}` +
       '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=' +
-      `${ctx.params.page}&with_keywords=${keyword}`
+      `${ctx.request.query.page}&with_keywords=${keyword}`
     let movies = await Request.get(movieUrl)
 
     movies = JSON.parse(movies)
@@ -44,6 +44,7 @@ router.get('/:search/:page', async(ctx) => {
   }
 })
 
+// GET /api/movies/:id
 router.get('/:id', async(ctx) => {
   try {
     // Get movie details from TMDB to have IMDB ID
