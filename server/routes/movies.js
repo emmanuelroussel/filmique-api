@@ -50,15 +50,35 @@ router.get('/:id', async(ctx) => {
     // Get movie details from TMDB to have IMDB ID
     const tmdbUrl = `${tmdbApiUrl}/movie/${ctx.params.id}?api_key=${tmdbApiKey}` +
       `&language=en-US`
-    let response = await Request.get(tmdbUrl)
+    let tmdbMovie = await Request.get(tmdbUrl)
 
-    response = JSON.parse(response)
+    tmdbMovie = JSON.parse(tmdbMovie)
 
     // Get movie details from OMDB with IMDB ID
-    const omdbUrl = `${omdbApiUrl}/?i=${response.imdb_id}&plot=full&r=json`
+    const omdbUrl = `${omdbApiUrl}/?i=${tmdbMovie.imdb_id}&plot=full&r=json`
     let info = await Request.get(omdbUrl)
 
     info = JSON.parse(info)
+
+    if (!info.Plot || info.Plot === 'N/A') {
+      info.Plot = tmdbMovie.overview
+    }
+
+    if (!info.Genre || info.Genre === 'N/A') {
+      info.Genre = ''
+
+      for (let i = 0; i < tmdbMovie.genres.length; i++) {
+        info.Genre += tmdbMovie.genres[i].name
+
+        if (i !== tmdbMovie.genres.length - 1) {
+          info.Genre += ', '
+        }
+      }
+    }
+
+    if (!info.Runtime || info.Runtime === 'N/A') {
+      info.Runtime = tmdbMovie.runtime
+    }
 
     ctx.body = info
   } catch (err) {
