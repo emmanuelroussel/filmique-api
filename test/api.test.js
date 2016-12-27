@@ -33,6 +33,7 @@ describe('GET /movies/:id', () => {
         res.body.Genre.should.be.a('string')
         res.body.Plot.should.be.a('string')
         res.body.imdbRating.should.be.a('string')
+        res.body.tomatoMeter.should.be.a('string')
         done()
       })
   })

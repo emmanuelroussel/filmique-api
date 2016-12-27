@@ -55,7 +55,7 @@ router.get('/:id', async(ctx) => {
     tmdbMovie = JSON.parse(tmdbMovie)
 
     // Get movie details from OMDB with IMDB ID
-    const omdbUrl = `${omdbApiUrl}/?i=${tmdbMovie.imdb_id}&plot=full&r=json`
+    const omdbUrl = `${omdbApiUrl}/?i=${tmdbMovie.imdb_id}&plot=full&r=jsonc&tomatoes=true`
     let info = await Request.get(omdbUrl)
 
     info = JSON.parse(info)
