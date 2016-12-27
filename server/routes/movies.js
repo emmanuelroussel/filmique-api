@@ -37,7 +37,7 @@ router.get('/search', async(ctx) => {
 
     ctx.body = movies
   } catch (err) {
-    if (err.name === 'CastError' || err.name === 'NotFoundError') {
+    if (err.name === 'CastError' || err.name === 'NotFoundError' || err.statusCode === 404) {
       ctx.throw(404)
     }
     ctx.throw(500)
@@ -82,7 +82,7 @@ router.get('/:id', async(ctx) => {
 
     ctx.body = info
   } catch (err) {
-    if (err.name === 'CastError' || err.name === 'NotFoundError') {
+    if (err.name === 'CastError' || err.name === 'NotFoundError' || err.statusCode === 404) {
       ctx.throw(404)
     }
     ctx.throw(500)

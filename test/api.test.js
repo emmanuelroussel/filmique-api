@@ -19,6 +19,24 @@ describe('GET /movies/search', () => {
         done()
       })
   })
+  it('should return 404 if search parameter is empty', (done) => {
+    request
+      .get('/api/movies/search?search=&page=1')
+      .expect(404)
+      done()
+  })
+  it('should return 404 if page parameter is empty', (done) => {
+    request
+      .get('/api/movies/search?search=space&page=')
+      .expect(404)
+      done()
+  })
+  it('should return 404 if both parameters are empty', (done) => {
+    request
+      .get('/api/movies/search?search=&page=')
+      .expect(404)
+      done()
+  })
 })
 
 describe('GET /movies/:id', () => {
@@ -36,5 +54,11 @@ describe('GET /movies/:id', () => {
         res.body.tomatoMeter.should.be.a('string')
         done()
       })
+  })
+  it('should return 404 if id is invalid', (done) => {
+    request
+      .get('/api/movies/1')
+      .expect(404)
+      done()
   })
 })
