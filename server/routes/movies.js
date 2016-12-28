@@ -36,6 +36,10 @@ router.get('/search', async(ctx) => {
 
     movies = JSON.parse(movies)
 
+    if (movies.results.length === 0) {
+      ctx.throw(404)
+    }
+
     // Format the poster url
     for (let i = 0; i < movies.results.length; i++) {
       movies.results[i].poster_path = `http://image.tmdb.org/t/p/w500/${movies.results[i].poster_path}`
