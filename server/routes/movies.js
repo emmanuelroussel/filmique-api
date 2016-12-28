@@ -42,7 +42,7 @@ router.get('/search', async(ctx) => {
 
     // Format the poster url
     for (let i = 0; i < movies.results.length; i++) {
-      movies.results[i].poster_path = `http://image.tmdb.org/t/p/w500/${movies.results[i].poster_path}`
+      movies.results[i].poster_path = `http://image.tmdb.org/t/p/w342${movies.results[i].poster_path}`
     }
 
     ctx.body = movies
