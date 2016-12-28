@@ -19,6 +19,12 @@ describe('GET /movies/search', () => {
         done()
       })
   })
+  it('should return 404 if keyword does not exist', (done) => {
+    request
+      .get('/api/movies/search?search=qahahjshdg&page=1')
+      .expect(404)
+      done()
+  })
   it('should return 404 if search parameter is empty', (done) => {
     request
       .get('/api/movies/search?search=&page=1')

@@ -19,10 +19,16 @@ router.get('/search', async(ctx) => {
     // Get keyword ID from TMDB
     const keywordUrl = `${tmdbApiUrl}/search/keyword?api_key=${tmdbApiKey}` +
       `&query=${ctx.request.query.search}&page=1`
-    const response = await Request.get(keywordUrl)
+    let response = await Request.get(keywordUrl)
+
+    response = JSON.parse(response)
+
+    if (response.results.length === 0) {
+      ctx.throw(404)
+    }
 
     // Use keyword ID to get list of movies
-    const keyword = JSON.parse(response).results[0].id
+    const keyword = response.results[0].id
     const movieUrl = `${tmdbApiUrl}/discover/movie?api_key=${tmdbApiKey}` +
       '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=' +
       `${ctx.request.query.page}&with_keywords=${keyword}`
