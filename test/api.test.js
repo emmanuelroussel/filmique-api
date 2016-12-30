@@ -5,10 +5,10 @@ import { expect, should } from 'chai'
 const request = supertest.agent(app.listen())
 should()
 
-describe('GET /movies/search', () => {
+describe('GET /search', () => {
   it('should get movies', (done) => {
     request
-      .get('/api/movies/search?search=space&page=1')
+      .get('/api/search?search=space&page=1')
       .expect(200, (err, res) => {
         res.body.page.should.equal(1)
         res.body.results[0].should.be.an('object')
@@ -21,25 +21,25 @@ describe('GET /movies/search', () => {
   })
   it('should return 404 if keyword does not exist', (done) => {
     request
-      .get('/api/movies/search?search=qahahjshdg&page=1')
+      .get('/api/search?search=qahahjshdg&page=1')
       .expect(404)
       done()
   })
   it('should return 404 if search parameter is empty', (done) => {
     request
-      .get('/api/movies/search?search=&page=1')
+      .get('/api/search?search=&page=1')
       .expect(404)
       done()
   })
   it('should return 404 if page parameter is empty', (done) => {
     request
-      .get('/api/movies/search?search=space&page=')
+      .get('/api/search?search=space&page=')
       .expect(404)
       done()
   })
   it('should return 404 if both parameters are empty', (done) => {
     request
-      .get('/api/movies/search?search=&page=')
+      .get('/api/search?search=&page=')
       .expect(404)
       done()
   })

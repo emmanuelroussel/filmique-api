@@ -5,70 +5,34 @@ import tmdbApiKey from '../secrets'
 import { tmdbApiUrl, omdbApiUrl } from '../global'
 import { baseApi } from '../config'
 
-const api = 'movies'
-
 const router = new Router();
 
-router.prefix(`/${baseApi}/${api}`)
+router.prefix(`/${baseApi}`)
 
 /* eslint-disable no-unused-vars, no-param-reassign, new-cap */
 
-// GET /api/movies/search
-router.get('/search', async(ctx) => {
-  try {
-    // Get keyword ID from TMDB
-    const keywordUrl = `${tmdbApiUrl}/search/keyword?api_key=${tmdbApiKey}` +
-      `&query=${ctx.request.query.search}&page=1`
-    let response = await Request.get(keywordUrl)
+async function getMovieFromTmdb(tmdbId) {
+  const url = `${tmdbApiUrl}/movie/${tmdbId}?api_key=${tmdbApiKey}` + `&language=en-US`
+  const movie = await Request.get(url)
 
-    response = JSON.parse(response)
+  return JSON.parse(movie)
+}
 
-    if (response.results.length === 0) {
-      ctx.throw(404)
-    }
+async function getMovieFromOmdb(imdbId) {
+  const url = `${omdbApiUrl}/?i=${imdbId}&plot=full&r=jsonc&tomatoes=true`
+  const movie = await Request.get(url)
 
-    // Use keyword ID to get list of movies
-    const keyword = response.results[0].id
-    const movieUrl = `${tmdbApiUrl}/discover/movie?api_key=${tmdbApiKey}` +
-      '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=' +
-      `${ctx.request.query.page}&with_keywords=${keyword}`
-    let movies = await Request.get(movieUrl)
-
-    movies = JSON.parse(movies)
-
-    if (movies.results.length === 0) {
-      ctx.throw(404)
-    }
-
-    // Format the poster url
-    for (let i = 0; i < movies.results.length; i++) {
-      movies.results[i].poster_path = `http://image.tmdb.org/t/p/w342${movies.results[i].poster_path}`
-    }
-
-    ctx.body = movies
-  } catch (err) {
-    if (err.name === 'CastError' || err.name === 'NotFoundError' || err.statusCode === 404) {
-      ctx.throw(404)
-    }
-    ctx.throw(500)
-  }
-})
+  return JSON.parse(movie)
+}
 
 // GET /api/movies/:id
-router.get('/:id', async(ctx) => {
+router.get('/movies/:id', async(ctx) => {
   try {
-    // Get movie details from TMDB to have IMDB ID
-    const tmdbUrl = `${tmdbApiUrl}/movie/${ctx.params.id}?api_key=${tmdbApiKey}` +
-      `&language=en-US`
-    let tmdbMovie = await Request.get(tmdbUrl)
+    const tmdbId = ctx.params.id
 
-    tmdbMovie = JSON.parse(tmdbMovie)
+    const tmdbMovie = await getMovieFromTmdb(tmdbId)
 
-    // Get movie details from OMDB with IMDB ID
-    const omdbUrl = `${omdbApiUrl}/?i=${tmdbMovie.imdb_id}&plot=full&r=jsonc&tomatoes=true`
-    let info = await Request.get(omdbUrl)
-
-    info = JSON.parse(info)
+    const info = await getMovieFromOmdb(tmdbMovie.imdb_id)
 
     if (!info.Plot || info.Plot === 'N/A') {
       info.Plot = tmdbMovie.overview
@@ -92,6 +56,7 @@ router.get('/:id', async(ctx) => {
 
     ctx.body = info
   } catch (err) {
+    console.log(err)
     if (err.name === 'CastError' || err.name === 'NotFoundError' || err.statusCode === 404) {
       ctx.throw(404)
     }
