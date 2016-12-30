@@ -15,7 +15,10 @@ const app = new Koa()
 app
   .use(logger())
   .use(bodyParser())
-  .use(cors())
+  .use(cors(
+    { origin: 'http://localhost:8080' },
+    { allowMethods: 'GET' }
+  ))
 
 routing(app)
 
