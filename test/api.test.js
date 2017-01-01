@@ -1,9 +1,13 @@
 import app from '../server/'
 import supertest from 'supertest'
-import { expect, should } from 'chai'
+import chai from 'chai'
+import chaiThings from 'chai-things'
 
 const request = supertest.agent(app.listen())
-should()
+
+chai.should()
+chai.expect()
+chai.use(chaiThings)
 
 describe('GET /search', () => {
   it('should get movies', (done) => {
@@ -11,11 +15,11 @@ describe('GET /search', () => {
       .get('/api/search?search=space&page=1')
       .expect(200, (err, res) => {
         res.body.page.should.equal(1)
-        res.body.results[0].should.be.an('object')
-        res.body.results[0].title.should.be.a('string')
-        res.body.results[0].poster_path.should.be.a('string')
-        res.body.results[0].overview.should.be.a('string')
-        res.body.results[0].release_date.should.be.a('string')
+        res.body.results.should.be.an.array
+        res.body.results.should.all.be.json
+        res.body.results.should.all.have.property('title')
+        res.body.results.should.all.have.property('poster_path')
+        res.body.results.should.all.have.property('release_date')
         done()
       })
   })
@@ -50,14 +54,14 @@ describe('GET /movies/:id', () => {
     request
       .get('/api/movies/157336')
       .expect(200, (err, res) => {
-        res.body.should.be.an('object')
-        res.body.Title.should.be.a('string')
-        res.body.Rated.should.be.a('string')
-        res.body.Runtime.should.be.a('string')
-        res.body.Genre.should.be.a('string')
-        res.body.Plot.should.be.a('string')
-        res.body.imdbRating.should.be.a('string')
-        res.body.tomatoMeter.should.be.a('string')
+        res.body.should.be.json
+        res.body.should.have.property('Title')
+        res.body.should.have.property('Rated')
+        res.body.should.have.property('Runtime')
+        res.body.should.have.property('Genre')
+        res.body.should.have.property('Plot')
+        res.body.should.have.property('imdbRating')
+        res.body.should.have.property('tomatoMeter')
         done()
       })
   })
