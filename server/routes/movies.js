@@ -12,7 +12,8 @@ router.prefix(`/${baseApi}`)
 /* eslint-disable no-unused-vars, no-param-reassign, new-cap */
 
 async function getMovieFromTmdb(tmdbId) {
-  const url = `${tmdbApiUrl}/movie/${tmdbId}?api_key=${tmdbApiKey}` + `&language=en-US`
+  const url = `${tmdbApiUrl}/movie/${tmdbId}?api_key=${tmdbApiKey}` +
+    `&language=en-US&append_to_response=videos`
   const movie = await Request.get(url)
 
   return JSON.parse(movie)
@@ -23,6 +24,10 @@ async function getMovieFromOmdb(imdbId) {
   const movie = await Request.get(url)
 
   return JSON.parse(movie)
+}
+
+function findTrailer(video) {
+  return video.type === 'Trailer' && video.site === 'YouTube'
 }
 
 // GET /api/movies/:id
@@ -52,6 +57,14 @@ router.get('/movies/:id', async(ctx) => {
 
     if (!info.Runtime || info.Runtime === 'N/A') {
       info.Runtime = `${tmdbMovie.runtime}` // Convert to String
+    }
+
+    if (tmdbMovie.videos.results) {
+      const trailer = tmdbMovie.videos.results.find(findTrailer)
+
+      if (trailer) {
+        info.TrailerUrl = `https://www.youtube.com/watch?v=${tmdbMovie.videos.results.find(findTrailer).key}`
+      }
     }
 
     ctx.body = info

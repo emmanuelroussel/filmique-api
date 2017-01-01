@@ -62,6 +62,7 @@ describe('GET /movies/:id', () => {
         res.body.should.have.property('Plot')
         res.body.should.have.property('imdbRating')
         res.body.should.have.property('tomatoMeter')
+        res.body.should.have.property('TrailerUrl')
         done()
       })
   })
