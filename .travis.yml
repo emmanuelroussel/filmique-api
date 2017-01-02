@@ -1,5 +1,8 @@
 language: node_js
 node_js:
-  - "6"
-  - "6.9.2"
-  - "5"
+- '6'
+- 6.9.2
+- '5'
+before_install:
+- openssl aes-256-cbc -K $encrypted_880ab4b40b0f_key -iv $encrypted_880ab4b40b0f_iv
+  -in server/secrets.js.enc -out server/secrets.js -d
