@@ -65,11 +65,11 @@ describe('GET /movies/:id', () => {
         res.body.should.have.property('TrailerUrl')
         done()
       })
-  })
+  }).timeout(10000);
   it('should return 404 if id is invalid', (done) => {
     request
       .get('/api/movies/1')
       .expect(404)
       done()
-  })
+  }).timeout(10000);
 })
