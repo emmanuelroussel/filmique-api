@@ -2,12 +2,8 @@ import bodyParser from 'koa-bodyparser'
 import Koa from 'koa'
 import cors from 'kcors'
 import logger from 'koa-logger'
-import mongoose from 'mongoose'
 import routing from './routes/'
-import { port, connexionString } from './config'
-
-mongoose.connect(connexionString)
-mongoose.connection.on('error', console.error)
+import { port } from './config'
 
 // Create Koa Application
 const app = new Koa()
