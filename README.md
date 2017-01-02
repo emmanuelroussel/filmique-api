@@ -41,5 +41,3 @@ Building and Running Production Server
 ```
 npm run prod
 ```
-
-**Note : Please make sure your MongoDB is running before using ```npm start``` or ```npm run prod```**
