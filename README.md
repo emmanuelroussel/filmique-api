@@ -1,25 +1,19 @@
-# filmique-api
+# filmique api
 
 ## Description
-Koa 2 RESTful API using :
+RESTful API built using [Koa 2](https://github.com/koajs/koa/tree/v2.x). Adapted from [koa-restful-boilerplate](https://github.com/jsnomad/koa-restful-boilerplate).
 
- - Koa 2
- - Mongodb + Mongoose
- - Babel
- - Asynchronous Functions (Async/Await)
-
-Adapted from [koa-restful-boilerplate](https://github.com/jsnomad/koa-restful-boilerplate) boilerplate
+This API is simply a wrapper around the [TMDb API](https://developers.themoviedb.org/3) and the [OMDb API](https://www.omdbapi.com/), so all the data come from these two.
 
 ## Getting Started
-This Rest API uses the [TMDB](https://www.themoviedb.org) api to get movies. You will need your own api key to use it. The process to get one is described on [their docs](https://developers.themoviedb.org/3).
+This API uses the TMDb API to search for movies. You will need your own api key to use it. The process to get one is described on [their docs](https://developers.themoviedb.org/3).
 
-Once you got your key, create a file called `secrets.js` in the `server/` directory and replace the dummy content with your api key.
-```
+First, clone this repo. Then, once you got your api key from TMDb, create a file called `secrets.js` in the `server/` directory and put this code in the file and make sure to replace `your tmdb api key` with your key.
+``` javascript
 const tmdbApiKey = 'your tmdb api key'
 
 export default tmdbApiKey
 ```
-
 
 Install dependencies
 ```
